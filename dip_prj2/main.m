@@ -1,3 +1,6 @@
+%Zac Ferris
+%Stephen Lederer
+
 function main()
 
     imageName = 'rose512.tif';

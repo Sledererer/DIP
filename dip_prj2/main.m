@@ -1,7 +1,7 @@
 function main()
 
     imageName = 'rose512.tif';
-    treshold = '0.05';
+    treshold = 0.05;
     sig = 1;
     nsig = 2;
     

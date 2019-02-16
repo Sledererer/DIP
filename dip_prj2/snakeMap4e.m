@@ -1,12 +1,5 @@
 function emap = snakeMap4e(F,varargin)
 
-%Input Validation
-
-%T:     [0-1] or ‘auto’
-%SIG:   Positive Integer
-%NSIG:  Positive Integer
-%Order: ‘before’,’after’,’both’,’none’(default)
-
 if nargin == 1
     %Validate ImageName Argument
     validateattributes(F,{'char'},{'nonempty'})
@@ -16,7 +9,7 @@ if nargin == 1
     %outIMG = edge(inIMG,'Sobel');
     Gmag = imgradient(inIMG,'Sobel');
     
-    imshow(Gmag)
+    emap = Gmag;
     
 elseif nargin == 2
     %Validate ImageName Argument
@@ -48,7 +41,7 @@ elseif nargin == 2
         edthresh = edge(inIMG,'Sobel',threshold);
     end
     
-    figure, imshow(edthresh) , title('Threshold')
+    emap = edthresh;
     
 elseif nargin == 5
     %Validate ImageName Argument
@@ -100,9 +93,7 @@ elseif nargin == 5
             edbef = edge(blur,'Sobel',threshold);
         end
         
-        figure, imshow(edbef) , title('Before')
-        %imshow(Gmag);
-        %title('Gradient Magnitude, Gmag')
+        emap = edbef;
         
     elseif order == "after"
         %gradient -> MOG -> threshold -> blur
@@ -119,7 +110,7 @@ elseif nargin == 5
         % Apply Gaussian Filter
         blur = imfilter(edaft,Gaus);
         
-        figure, imshow(blur) , title('After')
+        emap = blur;
         
     elseif order == "both"
         %blur -> gradient -> MOG -> threshold -> blur
@@ -140,7 +131,7 @@ elseif nargin == 5
         % Apply Gaussian Filter
         blur = imfilter(edboth,Gaus);
         
-        figure, imshow(blur) , title('Both')
+        emap = blur;
         
     elseif order == "none"
         %gradient -> MOG -> threshold
@@ -153,8 +144,8 @@ elseif nargin == 5
             edaft = edge(inIMG,'Sobel',threshold);
         end
         
-        figure, imshow(edaft) , title('None')
-        
+        emap = edaft;
+     
     else
         error('Unexpected order')
     end

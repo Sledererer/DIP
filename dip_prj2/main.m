@@ -1,96 +1,35 @@
-function main(F,varargin)
+% The emap results for six test cases using the image rose512.tif 
+%   (b) blurring of image before computing emap, 
+%   (c) blurring of the MOG after computing emap, 
+%   (d) blurring of image before computing emap and blurring after computing the MOG for emap, 
 
-%Input Validation
+function main()
 
-%T:     [0-1] or ‘auto’
-%SIG:   Positive Integer
-%NSIG:  Positive Integer
-%Order: ‘before’,’after’,’both’,’none’(default)
-
-if nargin == 1
-    %Validate ImageName Argument
-    validateattributes(F,{'char'},{'nonempty'})
+    imageName = 'rose512.tif';
+    treshold = '0.05';
+    sig = 1;
+    nsig = 2;
     
-    %Emap is produced without thresholding and without blurring
-    inIMG = imread(F);
-    outIMG = edge(inIMG,'Sobel');
+    % (a) no blurring and without thresholding
+    example_a = snakeMap4e(imageName);
+    figure, imshow(example_a) , title('No Blurring and Without Thresholding')
     
+    % (b) blurring of image before computing emap
+    example_b = snakeMap4e(imageName,treshold,sig,nsig,'before');
+    figure, imshow(example_b) , title('Blurring of Image Before Computing EMAP')
     
+    % (c) blurring of the MOG after computing emap
+    example_c = snakeMap4e(imageName,treshold,sig,nsig,'after');
+    figure, imshow(example_c) , title('Blurring of the MOG After Computing EMAP')
     
-    imshow(Ig)
+    % (d) blurring of image before computing emap and blurring after computing the MOG for emap
+    example_d = snakeMap4e(imageName,treshold,sig,nsig,'both');
+    figure, imshow(example_d) , title('Bluring of Image Before & After Computing EMAP')
     
-elseif nargin == 2
-    %Validate ImageName Argument
-    validateattributes(F,{'char'},{'nonempty'})
+    % (e) no blurring but given a threshold a priori
+    example_e = snakeMap4e(imageName,treshold);
+    figure, imshow(example_e) , title('No Bluring With Non-Automatic Thresholding')
     
-    %Validate Threshold Argument
-    threshold = str2double(varargin(1));
-    if isnan(threshold)
-        threshold = string(varargin(1));
-        validatestring(threshold,"auto")
-    else
-        validateattributes(threshold,{'double'},{'>=',0.0,'<=',1.0})
-    end
-    
-    % EMAP is thresholded so
-    % that,at any point,EMAP=1 if EMAP>T,and it is zero
-    % otherwise. If T is the string 'auto', thresholding is done
-    % automatically. Otherwise, T is expected to be a number in the
-    % range [0,1].
-    
-elseif nargin == 5
-    %Validate ImageName Argument
-    validateattributes(F,{'char'},{'nonempty'})
-    
-    %Validate Threshold Argument
-    threshold = str2double(varargin(1));
-    
-    if isnan(threshold)
-        threshold = string(varargin(1));
-        validatestring(threshold,"auto")
-    else
-        validateattributes(threshold,{'double'},{'>=',0.0,'<=',1.0})
-    end
-    
-    %Validate SIG Argument
-    sig = cell2mat(varargin(2));
-    validateattributes(sig,{'double'},{'positive','nonzero'})
-    
-    %Validate NSIG Argument
-    nsig = cell2mat(varargin(3));
-    validateattributes(nsig,{'double'},{'positive','nonzero'})
-    
-    %Validate Order Argument
-    order = string(varargin(4));
-    validatestring(order,["before","after","both", "none"])
-    
-    %Input Image
-    inIMG = imread(F);
-    
-    % Gaussian filter with size = [NSIG*SIG NSIG*SIG] and sigma = SIG
-    Gaus = fspecial('gaussian',[nsig*sig, nsig*sig],sig);
-    
-    
-    % Apply Gaussian Filter (Pre)
-    Pre = imfilter(inIMG,Gaus);
-    
-    %Edge (no-filter)
-    edno = edge(inIMG,'Sobel');
-    
-    edpre = edge(Pre,'Sobel');
-    
-    edpost = imfilter(edno,Gaus);
-    
-    figure, imshow(edno) , title('No Blur')
-    figure, imshow(edpre), title('Pre-Blur')
-    figure, imshow(edpost) , title('Post-Blur')
-
-    
-else
-    disp('Invalid Number of Arguments Supplied')
-end
-
-
-
-
-end
+    % (f) allow an automatic threshold but do not blur
+    example_f = snakeMap4e(imageName,'auto');
+    figure, imshow(example_f) , title('No Bluring With Automatic Thresholding')

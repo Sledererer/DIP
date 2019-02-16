@@ -1,3 +1,6 @@
+%Zac Ferris
+%Stephen Lederer
+
 function EMAP = snakeMap4e(F,varargin)
 
 %Input Validation

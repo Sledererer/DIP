@@ -2,10 +2,10 @@ function emap = snakeMap4e(F,varargin)
 
 %Input Validation
 
-%T:     [0-1] or ‘auto’
+%T:     [0-1] or â€˜autoâ€™
 %SIG:   Positive Integer
 %NSIG:  Positive Integer
-%Order: ‘before’,’after’,’both’,’none’(default)
+%Order: â€˜beforeâ€™,â€™afterâ€™,â€™bothâ€™,â€™noneâ€™(default)
 
 if nargin == 1
     %Validate ImageName Argument

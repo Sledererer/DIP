@@ -1,29 +1,36 @@
 function emap = snakeMap4e(F,varargin)
 
+%Input Validation
+
+%T:     [0-1] or ‘auto’
+%SIG:   Positive Integer
+%NSIG:  Positive Integer
+%Order: ‘before’,’after’,’both’,’none’(default)
+
 if nargin == 1
     %Validate ImageName Argument
     validateattributes(F,{'char'},{'nonempty'})
     
     %Emap is produced without thresholding and without blurring
     inIMG = imread(F);
-    %outIMG = edge(inIMG,'Sobel');
     Gmag = imgradient(inIMG,'Sobel');
     
-    emap = Gmag;
+    imshow(Gmag)
     
 elseif nargin == 2
     %Validate ImageName Argument
     validateattributes(F,{'char'},{'nonempty'})
     
     %Validate Threshold Argument
-    threshold = str2double(varargin(1));
-    if isnan(threshold)
+    threshold = cell2mat(varargin(1));
+    
+    if isnumeric(threshold)
+        validateattributes(threshold,{'double'},{'>=',0.0,'<=',1.0})
+        auto = false;
+    else
         threshold = string(varargin(1));
         validatestring(threshold,"auto");
         auto = true;
-    else
-        validateattributes(threshold,{'double'},{'>=',0.0,'<=',1.0})
-        auto = false;
     end
        
     % EMAP is thresholded so
@@ -41,22 +48,22 @@ elseif nargin == 2
         edthresh = edge(inIMG,'Sobel',threshold);
     end
     
-    emap = edthresh;
+    figure, imshow(edthresh) , title('Threshold')
     
 elseif nargin == 5
     %Validate ImageName Argument
     validateattributes(F,{'char'},{'nonempty'});
     
     %Validate Threshold Argument
-    threshold = str2double(varargin(1));
+    threshold = cell2mat(varargin(1));
     
-    if isnan(threshold)
+    if isnumeric(threshold)
+        validateattributes(threshold,{'double'},{'>=',0.0,'<=',1.0})
+        auto = false;
+    else
         threshold = string(varargin(1));
         validatestring(threshold,"auto");
-        auto = true;%boolean for later comparison in order
-    else
-        validateattributes(threshold,{'double'},{'>=',0.0,'<=',1.0});
-        auto = false;
+        auto = true;
     end
     
     %Validate SIG Argument
@@ -93,7 +100,9 @@ elseif nargin == 5
             edbef = edge(blur,'Sobel',threshold);
         end
         
-        emap = edbef;
+        figure, imshow(edbef) , title('Before')
+        %imshow(Gmag);
+        %title('Gradient Magnitude, Gmag')
         
     elseif order == "after"
         %gradient -> MOG -> threshold -> blur
@@ -110,7 +119,7 @@ elseif nargin == 5
         % Apply Gaussian Filter
         blur = imfilter(edaft,Gaus);
         
-        emap = blur;
+        figure, imshow(blur) , title('After')
         
     elseif order == "both"
         %blur -> gradient -> MOG -> threshold -> blur
@@ -131,7 +140,7 @@ elseif nargin == 5
         % Apply Gaussian Filter
         blur = imfilter(edboth,Gaus);
         
-        emap = blur;
+        figure, imshow(blur) , title('Both')
         
     elseif order == "none"
         %gradient -> MOG -> threshold
@@ -144,8 +153,8 @@ elseif nargin == 5
             edaft = edge(inIMG,'Sobel',threshold);
         end
         
-        emap = edaft;
-     
+        figure, imshow(edaft) , title('None')
+        
     else
         error('Unexpected order')
     end

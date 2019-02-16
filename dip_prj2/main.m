@@ -1,8 +1,3 @@
-% The emap results for six test cases using the image rose512.tif 
-%   (b) blurring of image before computing emap, 
-%   (c) blurring of the MOG after computing emap, 
-%   (d) blurring of image before computing emap and blurring after computing the MOG for emap, 
-
 function main()
 
     imageName = 'rose512.tif';

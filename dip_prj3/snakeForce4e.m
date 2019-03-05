@@ -1,3 +1,6 @@
+%Zac Ferris
+%Stephen Lederer
+
 function [Fx,Fy] = snakeForce4e(emap,mode,mu,niter)
 % [Fx,Fy] = SNAKEFORCE4E(EMAP,MODE,MU,NITER) uses input edge 
 % map, EMAP, to derive force images Fx and Fy. These images are of 

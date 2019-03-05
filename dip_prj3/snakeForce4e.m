@@ -26,6 +26,7 @@ function [Fx,Fy] = snakeForce4e(emap,mode,mu,niter)
         
         figure, imshow(emap)
         figure, quiver(Fx,Fy)
+        saveas(gcf, 'VelocityPlot.png')
 
     end
 
